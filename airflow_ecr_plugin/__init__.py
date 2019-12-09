@@ -1,5 +1,5 @@
 from airflow import plugins_manager
-from aws_ecr_plugin import hooks, operators
+from airflow_ecr_plugin import hooks, operators
 
 
 class AwsEcrPlugin(plugins_manager.AirflowPlugin):

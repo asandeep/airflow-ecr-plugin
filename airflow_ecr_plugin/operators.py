@@ -1,7 +1,7 @@
 from airflow import models
 from airflow.models import connection
 from airflow.utils import db, decorators
-from aws_ecr_plugin import hooks
+from airflow_ecr_plugin import hooks
 
 
 class RefreshEcrDockerConnectionOperator(models.BaseOperator):
@@ -45,7 +45,7 @@ class RefreshEcrDockerConnectionOperator(models.BaseOperator):
                 docker_connection = connection.Connection(
                     conn_id=self.ecr_docker_conn_id,
                     conn_type="docker",
-                    host=auth_token_data.proxyEndPoint,
+                    host=auth_token_data.proxyEndpoint,
                     login=auth_token_data.username,
                 )
                 session.add(docker_connection)
