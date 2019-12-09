@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "airflow_ecr_plugin"
-version = "0.1.0"
+version = "0.1.1"
 description = "Airflow ECR plugin"
 authors = ["Sandeep Aggarwal <asandeep.me@gmail.com>"]
 license = "Apache-2.0"
@@ -15,7 +15,7 @@ classifiers = [
 ]
 
 [tool.poetry.dependencies]
-python = "^2.7"
+python = "^2.7 || ^3.0"
 apache-airflow = {version = "^1.10", optional = true}
 boto3 = "^1.10"
 
