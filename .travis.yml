@@ -11,8 +11,7 @@ before_install:
     - pip install poetry
 install:
     - poetry install -v -E airflow
-    - pip install tox-travis
-    - pip install --user codecov
+    - pip install tox-travis codecov
 after_success:
     - codecov
 script:
