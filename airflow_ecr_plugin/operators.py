@@ -5,6 +5,19 @@ from airflow_ecr_plugin import hooks
 
 
 class RefreshEcrDockerConnectionOperator(models.BaseOperator):
+    """Refreshes the login information for AWS Elastic container registry.
+
+    Attrs:
+        ecr_docker_conn_id (string): Airflow connection that will be updated
+            when this operator executes. The same connection ID should also be
+            passed to `DockerOperator` as `docker_conn_id` to make Airflow login
+            to ECR.
+        ecr_region (string): AWS region where ECR repository is hosted.
+        aws_conn_id (string): Airflow connection containing AWS credentials that
+            should be used to validate to ECR. If no connection ID is provided,
+            `aws_default` will be used.
+    """
+
     @decorators.apply_defaults
     def __init__(
         self,
