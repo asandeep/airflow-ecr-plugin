@@ -4,9 +4,14 @@ version = "0.1.2"
 description = "Airflow ECR plugin"
 authors = ["Sandeep Aggarwal <asandeep.me@gmail.com>"]
 license = "Apache-2.0"
+
 readme = "README.md"
+
 homepage = "https://github.com/asandeep/airflow-ecr-plugin"
 repository = "https://github.com/asandeep/airflow-ecr-plugin.git"
+
+keywords = ["airflow", "ecr", "docker"]
+
 classifiers = [
     "Development Status :: 4 - Beta",
     "Environment :: Plugins",
@@ -15,19 +20,31 @@ classifiers = [
 ]
 
 [tool.poetry.dependencies]
-python = "^2.7 || ^3.0"
-apache-airflow = {version = "^1.10", optional = true}
+python = "^2.7.5 || ^3.5"
+apache-airflow = {version = "^1.10.9", optional = true}
 boto3 = "^1.10"
 
 [tool.poetry.dev-dependencies]
-pytest = [
-    {version = "^4.6", python = "^2.7"},
-    {version = "^5.3", python = "^3.0"}
-]
-moto = "^1.3"
+pytest = "^4.6"
+moto = "^1.3.14"
+tox = "^3.14.5"
+pytest-cov = "^2.8.1"
 
 [tool.poetry.extras]
 airflow = ["apache-airflow"]
+
+[tool.tox]
+legacy_tox_ini = """
+[tox]
+isolated_build = true
+envlist = py27, py36
+
+[testenv]
+whitelist_externals = poetry
+commands =
+    poetry install -E airflow
+    poetry run pytest --cov-report=xml --cov=airflow_ecr_plugin
+"""
 
 [build-system]
 requires = ["poetry>=0.12"]

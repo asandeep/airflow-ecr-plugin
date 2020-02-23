@@ -35,8 +35,8 @@ class AwsEcrHook(AwsHook):
     Hook to interact with Amazon Elastic Container Registry.
     """
 
-    def __init__(self, region_name, *args, **kwargs):
-        super(AwsEcrHook, self).__init__(*args, **kwargs)
+    def __init__(self, region_name, aws_conn_id="aws_default", verify=None):
+        super(AwsEcrHook, self).__init__(aws_conn_id, verify)
 
         self._conn = self.get_client_type("ecr", region_name)
 
