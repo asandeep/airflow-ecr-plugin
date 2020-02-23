@@ -20,7 +20,7 @@ classifiers = [
 ]
 
 [tool.poetry.dependencies]
-python = "^2.7.5 || ^3.6"
+python = "^2.7.5 || ^3.5"
 apache-airflow = {version = "^1.10.9", optional = true}
 boto3 = "^1.10"
 
@@ -28,6 +28,7 @@ boto3 = "^1.10"
 pytest = "^4.6"
 moto = "^1.3.14"
 tox = "^3.14.5"
+pytest-cov = "^2.8.1"
 
 [tool.poetry.extras]
 airflow = ["apache-airflow"]
@@ -42,7 +43,7 @@ envlist = py27, py36
 whitelist_externals = poetry
 commands =
     poetry install -E airflow
-    poetry run pytest
+    poetry run pytest --cov-report=xml --cov=airflow_ecr_plugin
 """
 
 [build-system]
