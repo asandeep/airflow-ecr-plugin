@@ -7,12 +7,9 @@ matrix:
     include:
         - python: 3.7
     dist: xenial
-before_install:
-    - pip install poetry
 install:
-    - poetry install -v -E airflow
-    - pip install tox-travis codecov
-after_success:
-    - codecov
+    - pip install poetry tox-travis codecov
 script:
     - tox
+after_success:
+    - codecov
