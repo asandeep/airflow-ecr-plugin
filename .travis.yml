@@ -18,6 +18,7 @@ jobs:
   include:
     # Deploy stage to create Github release and deploy to PyPi after default test stage is completed.
     - stage: deploy
+      python: "3.6"
       script:
         - poetry config pypi-token.pypi $PYPI_APIKEY
         - poetry build
