@@ -20,6 +20,7 @@ jobs:
         - poetry build
       deploy:
         - provider: script
+          skip_cleanup: true
           script: poetry publish
           on:
             tags: true
