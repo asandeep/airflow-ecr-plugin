@@ -1,18 +1,46 @@
 language: python
+
+cache:
+  directories:
+    - $HOME/.cache/pip
+
 python:
-    - '2.7'
-    - '3.5'
-    - '3.6'
-matrix:
-    include:
-        - python: 3.7
-    dist: xenial
-before_install:
-    - pip install poetry
+  - "2.7"
+  - "3.5"
+  - "3.6"
+  - "3.7"
+
+env:
+  global:
+    secure: fIibEk93cJ0muBW3FjedZZmXaPF+df/MFj0A64bkz4k/MbtMbp4hSgNHN20Cp9TVIyMkyT/nHfgCqGcKC2e68dqEYyIQmof0HfdDmmxHJioHxagjw4UAUJVlHqPJ1yxOGaxaMxrKJVOC0nW90urhtOKxmHtW0U27fXO91rogexQk7M8Zns0Wa/e+5p1yIgU84tl714qUVhCnjGxb/8Pckm270KhUVrGSj0kQ0B6GmqtI4/7UvvawT4qw/D1A38jCCT+d1FHywQM90O8rJZN/AR3Gw0HxuWDVoMKZmXm17Tzmcgfc9q15eoln25U3Klf1G0zB4mtqdWUHVe/YcLG922fuKgyPpPxFw5onZTlwfHa1FNbvMhN1cejbmxy3IQ5bDKRkcJFqEp/mEtNXWQLMIJluNljP0AXvuQxPwiCmzQtP0ClgerEPny4BUY7kE1uAL726UVUIwjTW98vIYYpbSDplDCoE23snW+fgn4ivRfxrwFtbeWQxuyTqZhzgA7JvRnektnjKmzlw7kZGVAmZEqkPJmtmUtIH8KocRMZm4wGVjPXpFIHRBJrzig0MPb9X1yRBPuuxKNi/a+h4nJU4bvBk0NEmnp5QXXowQkBJxxzz6YQ10I7+hQ2ig/EgeXtiLTvD+LEh7PXALEnh1r2QVlVWM4UxeIHxaNVKNf02xZg=
+
+jobs:
+  include:
+    # Deploy stage to create Github release and deploy to PyPi after default test stage is completed.
+    - stage: deploy
+      python: "3.6"
+      script:
+        - poetry config pypi-token.pypi $PYPI_APIKEY
+        - poetry build
+      deploy:
+        - provider: script
+          script: poetry publish
+          on:
+            tags: true
+            repo: asandeep/airflow-ecr-plugin
+        - provider: releases
+          api_key:
+            secure: tK2dP54CpTqQPJ8UBdmOuck5vSqWBMNNbIgbCxxmFWZ4zpFJA0hiQPWLaEgypGDUa33RXtQX5yWRzfiFZTr8tYV2ZmOjBvR4ChbiiV4UOZ+dG28KYgZ2TWjPHx8X23/P9rXs29fliFOiNhAW5FdfIYTX1qiBRmN6zTL0scFg0QmnAjCc7bc75NvZYUh/MUZQo8pUcuFU9TEyoWYtjAUulzjttS1SFjcNB6STSLBgc+gry5KPQgUQx/vFObbwRROS3ABeLrhYHGbRGReeEkeMoayyOz59Jeveh9okwCv0pJwMHjWr6uUMMKHJJ/EMK6MJsYgN1r/osY/S7MCzXWiven3oToFZMLJAf8HzIdR/zJUvqJIo4dLj0NUm4VbpET0cA3130MZRnRCOgMLgvUSmRkG2JwjPBBBeCZt6TjODWfkrbtw8HlKkya9j25C4CXCl0bdMOEVe9y2FmsR4DUWDsP/bp75eYldnhPsl4S9D2nr5OFxSZfmXJOeWLBZ9urpR8F3gzVj+q1JjDbmwJrLCUi9WNUykj/DUFagSQw70+MOQjlSpzprLTGgr4iFCk17AbCNinmfqsT3ROYMRBLqi/4PnF//TvAD5/WreShUYEyQwTktbd4Yw2Ru+RtIzwbm19H4eQepryGPrCA+DgCZbb8RuT1075txQ7goMG6TNq3s=
+          file: dist/*.tar.gz
+          file_glob: true
+          skip_cleanup: true
+          on:
+            tags: true
+            repo: asandeep/airflow-ecr-plugin
+
 install:
-    - poetry install -v -E airflow
-    - pip install tox-travis codecov
-after_success:
-    - codecov
+  - pip install poetry tox-travis codecov
 script:
-    - tox
+  - tox
+after_success:
+  - codecov
