@@ -6,19 +6,17 @@
 [![Package Version](https://img.shields.io/pypi/v/airflow-ecr-plugin.svg)](https://pypi.org/project/airflow-ecr-plugin/)
 [![Black](https://img.shields.io/badge/code%20style-black-000000.svg)](https://github.com/psf/black)
 
-This plugin implements Airflow hooks and operators to interact with AWS Elastic container registry.
-
-This plugin provides an operator that refreshes ECR login token at specific intervals.
+This plugin exposes an operator that refreshes ECR login token at regular intervals.
 
 ## About
 
 [Amazon ECR](https://docs.aws.amazon.com/AmazonECR/latest/userguide/what-is-ecr.html) is a AWS managed Docker registry to host private Docker container images. Access to Docker repositories hosted on ECR can be controlled with resource based permissions using AWS IAM.
 
-To push/pull images, Docker client must authenticate to ECR registry as an AWS user. An authorization token can be generated using AWS CLI `get-login-password` command that can be passed to `docker login` command to authenticate to ECR registry.
+To push/pull images, Docker client must authenticate to ECR registry as an AWS user. An authorization token can be generated using AWS CLI `get-login-password` command that can be passed to `docker login` command to authenticate to ECR registry. For instructions on setting up ECR and obtaining login token to authenticate Docker client, click [here](https://docs.aws.amazon.com/AmazonECR/latest/userguide/getting-started-cli.html).
 
 The authorization token obtained using `get-login-password` command is only valid for 12 hours and Docker client needs to authenticate with fresh token after every 12 hours to make sure it can access Docker images hosted on ECR. Moreover, ECR registries are region specific and separate token should be obtained to authenticate to each registry.
 
-The whole process can be quite cumbersome when combined with Apache Airflow. Airflow's `DockerOperator` accepts `docker_conn_id` parameter that it can use to authenticate and pull images from private repositories. In case this private registry is ECR, a connection can be created with login token obtained from `get-login-password` command and the corresponding ID can be passed to `DockerOperator`. However, since the token is only valid for 12 hours, `DockerOperator` will fail to fetch images from ECR, once token is expired.
+The whole process can be quite cumbersome when combined with Apache Airflow. Airflow's `DockerOperator` accepts `docker_conn_id` parameter that it uses to authenticate and pull images from private repositories. In case this private registry is ECR, a connection can be created with login token obtained from `get-login-password` command and the corresponding ID can be passed to `DockerOperator`. However, since the token is only valid for 12 hours, `DockerOperator` will fail to fetch images from ECR once token is expired.
 
 This plugin implements `RefreshEcrDockerConnectionOperator` Airflow operator that can automatically update the ECR login token at regular intervals.
 
@@ -56,7 +54,7 @@ setup(
 )
 ```
 
-If you are using Poetry, plugin can be loaded by adding it under `[tool.poetry.plugin."airflow.plugins"] section. i.e.
+If you are using Poetry, plugin can be loaded by adding it under `[tool.poetry.plugin."airflow.plugins"]` section as below:
 
 ```toml
 [tool.poetry.plugins."airflow.plugins"]
