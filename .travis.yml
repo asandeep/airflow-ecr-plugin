@@ -1,9 +1,5 @@
 language: python
 
-cache:
-  directories:
-    - $HOME/.cache/pip
-
 python:
   - "2.7"
   - "3.5"
@@ -24,6 +20,7 @@ jobs:
         - poetry build
       deploy:
         - provider: script
+          skip_cleanup: true
           script: poetry publish
           on:
             tags: true
